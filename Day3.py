@@ -1,3 +1,4 @@
+from collections import defaultdict
 # 37  36  35  34  33  32  31
 # 38  17  16  15  14  13  30
 # 39  18   5   4   3  12  29
@@ -52,6 +53,54 @@ def day3(top = 289326):
         count += 1
     print(abs(spiral[289326][0])+abs(spiral[289326][1]))
 
+# Store the point as the key and the number as the value. This will make looking up adjacent values simple
+# Also, use defaultDict so it can look at uninitialized dict entries
+def day3_pt2(top = 289326):
+    def addAdjacent(pos):
+        return spiral[(pos[0]+1, pos[1])]+\
+               spiral[(pos[0]-1, pos[1])]+\
+               spiral[(pos[0], pos[1]+1)]+\
+               spiral[(pos[0], pos[1]-1)]+\
+               spiral[(pos[0]+1, pos[1]+1)]+\
+               spiral[(pos[0]+1, pos[1]-1)]+\
+               spiral[(pos[0]-1, pos[1]+1)]+\
+               spiral[(pos[0]-1, pos[1]-1)]
+
+    current = 1
+    count = 1
+    pos = [0,0]
+    spiral = defaultdict(int)
+    spiral[(0,0)] = current
+    while current <= top:
+        #R
+        for i in range(count):
+            current += 1
+            pos[0] += 1
+            if addAdjacent(pos) > top: return addAdjacent(pos)
+            spiral[pos[0], pos[1]] = addAdjacent(pos)
+        #U
+        for i in range(count):
+            current += 1
+            pos[1] += 1
+            if addAdjacent(pos) > top: return addAdjacent(pos)
+            spiral[pos[0], pos[1]] = addAdjacent(pos)
+        count += 1
+        # L
+        for i in range(count):
+            current+= 1
+            pos[0] -= 1
+            if addAdjacent(pos) > top: return addAdjacent(pos)
+            spiral[pos[0], pos[1]] = addAdjacent(pos)
+        #D
+        for i in range(count):
+            current+= 1
+            pos[1] -= 1
+            if addAdjacent(pos) > top: return addAdjacent(pos)
+            spiral[pos[0], pos[1]] = addAdjacent(pos)
+
+        count += 1
+
 day3()
+print(day3_pt2())
 
 
