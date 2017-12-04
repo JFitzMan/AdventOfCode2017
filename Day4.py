@@ -8,17 +8,13 @@ def day4():
     return validCount
 
 def day4_pt2():
-    def noAnagram(l):
-        for i in range(len(l)):
-            l[i] = ''.join(sorted(l[i])) # Sort each individual word, then anagrams become duplicates
-        if len(l) == len(set(l)): return True
-        else: return False
-
     validCount = 0
     with open('day4.txt', 'r') as f:
         for line in f:
             words = line.split()
-            if len(words) == len(set(words)) and noAnagram(words): # set() removes duplicates
+            for i in range(len(words)):
+                words[i] = ''.join(sorted(words[i]))  # Sort each individual word, then anagrams become duplicates
+            if len(words) == len(set(words)):
                 validCount+=1
     return validCount
 
