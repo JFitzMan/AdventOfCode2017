@@ -33,14 +33,19 @@ class Node:
 
     def weightOfTower(self, nodes):
         sum = int(self.weight)
-        print(self.weight)
         for c in self.children:
-            print(c)
             sum += int(nodes[c].weightOfTower(nodes))
         return sum
 
+    def weightOfChildTowers(self, nodes):
+        vals = []
+        for c in self.children:
+            vals.append(int(nodes[c].weightOfTower(nodes)))
+        return vals
 
 
+def checkEqual(iterator):
+   return len(set(iterator)) <= 1
 
 def day7():
     regex = re.compile(r'^(\w+) \((\d+)\)(?: -> ([\w, ]+))?')
@@ -48,11 +53,8 @@ def day7():
     with open('day7.txt', 'r') as f:
         for line in f:
             m = regex.match(line)
-            print(m.group(1))
             parent[m.group(1).strip()]
-            print(m.group(2))
             if m.group(3) is not None:
-                print(m.group(3).split(','))
                 for proc in m.group(3).split(','):
                     parent[proc.strip()] = True
         for name, parentStatus in parent.items():
@@ -89,7 +91,10 @@ def day7_pt2():
             print('parent: '+node.getParent())
             #print('weight: '+node.weightOfTower(nodes))
             print()
-        print(nodes['ugml'].weightOfTower(nodes))
+
+        for name, node in nodes.items():
+            if checkEqual(node.weightOfChildTowers(nodes)) is False:
+                print(node.weightOfChildTowers(nodes))
 
 #day7()
 day7_pt2()
