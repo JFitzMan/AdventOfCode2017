@@ -31,15 +31,23 @@ class Node:
     def setParent(self, parent):
         self.parent = parent
 
-    def weightOfTower(self, nodes):
+    def weightOfTower(self, nodes, space=''):
         sum = int(self.weight)
         for c in self.children:
-            sum += int(nodes[c].weightOfTower(nodes))
+            print("         name: " + nodes[c].getName() + "\tweight: " + str(nodes[c].getWeight()))
+            sum += int(nodes[c].weightOfTower(nodes, space+' '))
         return sum
 
     def weightOfChildTowers(self, nodes):
         vals = []
         for c in self.children:
+            vals.append(int(nodes[c].weightOfTower(nodes)))
+        return vals
+
+    def weightOfChildTowers2(self, nodes):
+        vals = []
+        for c in self.children:
+            print("name: "+nodes[c].getName()+"\tweight: "+str(nodes[c].getWeight()))
             vals.append(int(nodes[c].weightOfTower(nodes)))
         return vals
 
@@ -84,17 +92,13 @@ def day7_pt2():
                     if c in nodes:
                         nodes[c].setParent(name)
 
-
-        for name, node in nodes.items():
-            print('name: '+node.getName())
-            print('children: '+str(node.getChildren()))
-            print('parent: '+node.getParent())
-            #print('weight: '+node.weightOfTower(nodes))
-            print()
-
         for name, node in nodes.items():
             if checkEqual(node.weightOfChildTowers(nodes)) is False:
-                print(node.weightOfChildTowers(nodes))
+                print()
+                print()
+                print(node.weightOfChildTowers2(nodes))
+                print(name)
 
 #day7()
 day7_pt2()
+# Three answers are output. This is because each tower that is built on the unbalanced tower is also unbalanced. The one that would need to change is the smallest weight
