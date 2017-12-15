@@ -4,7 +4,7 @@ from collections import defaultdict
 dict = defaultdict(bool)
 pipes = {}
 
-def scanChildren(start, level):
+def scanChildren(start, level=0):
     if dict[start] == True:
         return level
     dict[start] = True
@@ -19,34 +19,19 @@ def day12():
             parent = int(match.group(1))
             children = list(map(int, match.group(2).split(',')))
             pipes[parent] = children
-    #print(pipes)
+
     scanChildren(0)
-    print(dict)
     total = 0
     for x, y in dict.items():
         total+=1
-    print(total)
-
-def day12_pt2():
-    regex = re.compile(r'(\d+) <-> ([\d ,]+)')
-    with open('day12.txt', 'r') as f:
-        for line in f:
-            match = regex.match(line)
-            parent = int(match.group(1))
-            children = list(map(int, match.group(2).split(',')))
-            pipes[parent] = children
+    print('Total in group with 0: '+str(total))
 
     count = 0
     for x, y in pipes.items():
-        level = scanChildren(x, 0)
+        level = scanChildren(x)
         if level != 0:
-            count+=1
-    print(dict)
-    total = 0
-    for x, y in dict.items():
-        total+=1
-    print(count)
+            count += 1
+    print('Total groups: ' + str(count))
 
 
-
-day12_pt2()
+day12()
